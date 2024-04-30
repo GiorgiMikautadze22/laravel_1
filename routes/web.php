@@ -1,36 +1,23 @@
 <?php
 
-use Illuminate\Support\Arr;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Job;
-
-Route::get('/', function () {
-    return view('home');
-});
 
 
+Route::view('/', 'home');
+Route::view('/contact', 'contact');
 
-Route::get('/jobs', function () {
-    return view('jobs.show', [
-        'jobs' => Job::with('employer')->simplePaginate(3)
-//        'jobs' => Job::with('employer')->cursorPaginate(3)  can not go to page to page. it uses encoded url to fetch necessary from jobs table
-//        'jobs' => Job::with('employer')->Paginate(3)
-    ]);
-});
-
-//Route::get('/jobs/create', function () {
-//    return view('jobs.create');
+//Route::controller(JobController::class)->group(function () {
+//    Route::get('/jobs',  'index');
+//    Route::get('/jobs/create',  'create');
+//    Route::get('/jobs/{job}',  'show');
+//    Route::post('/jobs',  'store');
+//    Route::get('/jobs/{job}/edit',  'edit');
+//    Route::patch('/jobs/{job}',  'update');
+//    Route::delete('/jobs/{job}',  'destroy');
+//
 //});
 
-Route::get('/jobs/{id}', function ($id) {
-    $jobs = Job::all();
-
-    $job = Job::find($id);
+Route::resource('jobs', JobController::class);
 
 
-    return view('jobs.index', ['job' => $job]);
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
